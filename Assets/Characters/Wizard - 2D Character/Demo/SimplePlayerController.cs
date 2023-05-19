@@ -40,6 +40,13 @@ namespace ClearSky
             anim.SetBool("isJump", false);
         }
 
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.CompareTag("Ground"))
+            {
+                anim.SetBool("isJump", false);
+            }
+        }
 
         void Run()
         {
