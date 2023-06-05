@@ -8,6 +8,9 @@ TagManager:
   - enemy
   - kralice
   - prensesates
+  - key
+  - PlayerHand
+  - kafes
   layers:
   - Default
   - TransparentFX

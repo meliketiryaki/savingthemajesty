@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 namespace ClearSky
 {
@@ -10,16 +13,24 @@ namespace ClearSky
         private Rigidbody2D rb;
         private Animator anim;
         Vector3 movement;
-        private int direction = 1;
+        private float direction = 1.2f;
         bool isJumping = false;
         private bool alive = true;
+        private bool hasKey = false;
+        private bool canWin = false;
 
+        private bool isPickedUp = false; // Anahtarın alınıp alınmadığını takip etmek için flag
+        private Transform playerHand; // Player'ın elini temsil eden transform
 
         // Start is called before the first frame update
         void Start()
         {
             rb = GetComponent<Rigidbody2D>();
             anim = GetComponent<Animator>();
+            // Player'ın elini temsil eden objenin transformini al
+            playerHand = GameObject.FindGameObjectWithTag("PlayerHand").transform;
+            
+
         }
 
         private void Update()
@@ -34,10 +45,41 @@ namespace ClearSky
                 Run();
 
             }
+            if (canWin && Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                SceneManager.LoadScene("YouWin");
+            }
         }
         private void OnTriggerEnter2D(Collider2D other)
         {
             anim.SetBool("isJump", false);
+            if (other.gameObject.CompareTag("key"))
+            {
+                if (other.gameObject.CompareTag("Player") && !isPickedUp)
+                {
+                    // Anahtarın pozisyonunu Player'ın elinin üzerine ata
+                    transform.SetParent(playerHand);
+                    transform.localPosition = Vector3.zero;
+                    transform.localRotation = Quaternion.identity;
+                    isPickedUp = true;
+                }
+                hasKey = true;
+                // Anahtar alındığında yapılacak işlemleri ekleyebilirsiniz.
+            }
+
+            if (other.gameObject.CompareTag("kafes") && hasKey)
+            {
+                Destroy(other.gameObject);
+                // Kafes objesinin yok olmasını sağlayabilirsiniz.
+                StartCoroutine(WinDelay());
+            }
+           
+        }
+        IEnumerator WinDelay()
+        {
+            canWin = true;
+            yield return new WaitForSeconds(1.5f);
+            SceneManager.LoadScene("YouWin");
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -47,6 +89,8 @@ namespace ClearSky
                 anim.SetBool("isJump", false);
             }
         }
+        
+        
 
         void Run()
         {
@@ -56,20 +100,20 @@ namespace ClearSky
 
             if (Input.GetAxisRaw("Horizontal") < 0)
             {
-                direction = -1;
+                direction = -1.2f;
                 moveVelocity = Vector3.left;
 
-                transform.localScale = new Vector3(direction, 1, 1);
+                transform.localScale = new Vector3(direction, 1.2f, 1);
                 if (!anim.GetBool("isJump"))
                     anim.SetBool("isRun", true);
 
             }
             if (Input.GetAxisRaw("Horizontal") > 0)
             {
-                direction = 1;
+                direction = 1.2f;
                 moveVelocity = Vector3.right;
 
-                transform.localScale = new Vector3(direction, 1, 1);
+                transform.localScale = new Vector3(direction, 1.2f, 1);
                 if (!anim.GetBool("isJump"))
                     anim.SetBool("isRun", true);
 
