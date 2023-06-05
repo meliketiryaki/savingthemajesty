@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - enemy
+  - kralice
+  - prensesates
   layers:
   - Default
   - TransparentFX

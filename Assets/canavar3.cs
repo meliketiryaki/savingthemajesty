@@ -22,12 +22,12 @@ public class canavar3 : MonoBehaviour
         if (transform.position.x >= sinirlamaSag && hareketYonu == 1)
         {
             hareketYonu = -1;
-            transform.localScale = new Vector3(7f, 7f, 7f); // Canavarı sola döndür
+            transform.localScale = new Vector3(3f, 3f, 3f); // Canavarı sola döndür
         }
         else if (transform.position.x <= sinirlamaSol && hareketYonu == -1)
         {
             hareketYonu = 1;
-            transform.localScale = new Vector3(-7f, 7f, 7f); // Canavarı sağa döndür
+            transform.localScale = new Vector3(-3f, 3f, 3f); // Canavarı sağa döndür
         }
 
         // Hareketi uygula
